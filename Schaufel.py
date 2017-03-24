@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from Bohrmaschine import cutting_pickingup_values
 
 TIME = 0
+
 # get cookies
 mySession = requests.session()
 mySession.get("http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_01_pc")
@@ -28,7 +29,7 @@ for key in dict_values.keys():
     a.write(preview.text)
     a.close()
 
-    # magic Baby
+    # Magic Baby
     soup = BeautifulSoup(preview.text, 'html.parser')
     alltables = soup.findAll("table", attrs={"border": "1", "width": "100%"})
 
@@ -39,5 +40,7 @@ for key in dict_values.keys():
             print("   ")
             for td in cols:
                 print(td.text.strip(), end='\t'*3)
-    print('\n'"-------------------------------------------------------")
+
+    print('\n'"---------------------------------------------------------------")
     time.sleep(TIME)
+print('\n'"Fim do Relatório")
