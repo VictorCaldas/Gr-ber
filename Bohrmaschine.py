@@ -20,4 +20,9 @@ def cutting_pickingup_values():
         ('value: {}, text: {}'.format(option['value'], option.text))
         dict_values[option['value']] = option.text
 
+    print(dict_values)
     return dict_values
+
+if __name__ == "__main__":
+    cutting_pickingup_values()
+

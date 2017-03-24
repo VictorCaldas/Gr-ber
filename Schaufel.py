@@ -1,8 +1,6 @@
 import requests
 import time
 from bs4 import BeautifulSoup
-import pandas as pd
-
 from Bohrmaschine import cutting_pickingup_values
 
 TIME = 5
@@ -11,42 +9,36 @@ TIME = 5
 mySession = requests.session()
 mySession.get("http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_01_pc")
 
-dict_values = cutting_pickingup_values()
 # Get values for all places
+dict_values = cutting_pickingup_values()
 
-time.sleep(TIME)
+for key in dict_values.keys():
+    data = [
+        ('p_ano', '2017'),
+        ('p_verifica', 'sigef'),
+        ('p_programa', 'C7'),
+        ('p_cgc', ''),
+        ('p_uf', 'SP'),
+        ('p_municipio', key),
+        ('p_tp_entidade', '02'),
+    ]
 
-data = [
-    ('p_ano', '2017'),
-    ('p_verifica', 'sigef'),
-    ('p_programa', 'C7'),
-    ('p_cgc', ''),
-    ('p_uf', 'SP'),
-    ('p_municipio', '350010'),
-    ('p_tp_entidade', '02'),
-]
+    # Create preview
+    preview = mySession.post('http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_result_pc', data=data)
+    a = open("preview.html", "w")
+    a.write(preview.text)
+    a.close()
 
-# Create preview
-preview = mySession.post('http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_result_pc', data=data)
-a = open("preview.html", "w")
-a.write(preview.text)
-a.close()
+    # magic Baby
+    soup = BeautifulSoup(preview.text, 'html.parser')
+    alltables = soup.findAll("table", attrs={"border": "1", "width": "100%"})
 
-# magic Baby
-soup = BeautifulSoup(preview.text, 'html.parser')
-
-alltables = soup.findAll("table", attrs={"border": "1", "width": "100%"})
-
-print("Number of tables found : ", len(alltables))
-
-
-for table in alltables:
-    rows = table.findAll('tr')
-
-    for tr in rows:
-        cols = tr.findAll('td')
-        print("-------------------------------------")
-        for td in cols:
-            print(td.text)
-
-
+    for table in alltables:
+        rows = table.findAll('tr')
+        for tr in rows:
+            cols = tr.findAll('td')
+            print("   ")
+            for td in cols:
+                print(td.text, end='     ')
+    print("-------------------------------------------------------")
+    time.sleep(TIME)
