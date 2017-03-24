@@ -1,8 +1,7 @@
 import requests
 
-cookies = {
-    'bbbbbbbbbbbbbbb': 'FADBPJFJOMOMHKHHGGLHCLCPFKMCJJMELBBNIPCDFCEDKKGPKIOAAFLDOBAAHMBDGIEMIJKDLHEFKMDPEGBFFDEONFMBENODPPPPEDNALNCOGDBGHCMOKDADHABOPJBA',
-}
+mySession = requests.session()
+mySession.get("http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_01_pc")
 
 headers = {
     'Origin': 'http://www.fnde.gov.br',
@@ -27,4 +26,7 @@ data = [
   ('p_tp_entidade', '02'),
 ]
 
-requests.post('http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_result_pc', headers=headers, cookies=cookies, data=data)
+preview = mySession.post('http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_result_pc', headers=headers, data=data)
+a = open("preview.html","w")
+a.write(preview.text)
+a.close()
