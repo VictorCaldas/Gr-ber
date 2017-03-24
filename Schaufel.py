@@ -1,32 +1,52 @@
 import requests
+import time
+from bs4 import BeautifulSoup
+import pandas as pd
 
+from Bohrmaschine import cutting_pickingup_values
+
+TIME = 5
+
+# get cookies
 mySession = requests.session()
 mySession.get("http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_01_pc")
 
-headers = {
-    'Origin': 'http://www.fnde.gov.br',
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Cache-Control': 'max-age=0',
-    'Referer': 'http://www.fnde.gov.br/pls/simad/internet_fnde.LIBERACOES_01_PC?p_ano=2017&p_programa=C7&p_uf=SP&p_municipio=120170',
-    'Connection': 'keep-alive',
-}
+dict_values = cutting_pickingup_values()
+# Get values for all places
+
+time.sleep(TIME)
 
 data = [
-  ('p_ano', '2017'),
-  ('p_verifica', 'sigef'),
-  ('p_programa', 'C7'),
-  ('p_cgc', ''),
-  ('p_uf', 'SP'),
-  ('p_municipio', '350010'),
-  ('p_tp_entidade', '02'),
+    ('p_ano', '2017'),
+    ('p_verifica', 'sigef'),
+    ('p_programa', 'C7'),
+    ('p_cgc', ''),
+    ('p_uf', 'SP'),
+    ('p_municipio', '350010'),
+    ('p_tp_entidade', '02'),
 ]
 
-preview = mySession.post('http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_result_pc', headers=headers, data=data)
-a = open("preview.html","w")
+# Create preview
+preview = mySession.post('http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_result_pc', data=data)
+a = open("preview.html", "w")
 a.write(preview.text)
 a.close()
+
+# magic Baby
+soup = BeautifulSoup(preview.text, 'html.parser')
+
+alltables = soup.findAll("table", attrs={"border": "1", "width": "100%"})
+
+print("Number of tables found : ", len(alltables))
+
+
+for table in alltables:
+    rows = table.findAll('tr')
+
+    for tr in rows:
+        cols = tr.findAll('td')
+        print("-------------------------------------")
+        for td in cols:
+            print(td.text)
+
+
