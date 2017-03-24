@@ -3,8 +3,7 @@ import time
 from bs4 import BeautifulSoup
 from Bohrmaschine import cutting_pickingup_values
 
-TIME = 5
-
+TIME = 0
 # get cookies
 mySession = requests.session()
 mySession.get("http://www.fnde.gov.br/pls/simad/internet_fnde.liberacoes_01_pc")
@@ -39,6 +38,6 @@ for key in dict_values.keys():
             cols = tr.findAll('td')
             print("   ")
             for td in cols:
-                print(td.text, end='     ')
-    print("-------------------------------------------------------")
+                print(td.text.strip(), end='\t'*3)
+    print('\n'"-------------------------------------------------------")
     time.sleep(TIME)
