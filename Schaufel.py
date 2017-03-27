@@ -1,9 +1,13 @@
+
 import requests
 import time
 from bs4 import BeautifulSoup
 from Bohrmaschine import cutting_pickingup_values
+from money import Money
 
 TIME = 0
+teste = 0
+te = 0.0
 
 # get cookies
 mySession = requests.session()
@@ -40,6 +44,24 @@ for key in dict_values.keys():
             print("   ")
             for td in cols:
                 print(td.text.strip(), end='\t'*3)
+
+                if teste == 1:
+                    value = td.text.strip().replace(".", "").replace(",", ".")
+                    value = float(value)
+                    te = value * 10
+                    ttt = te * 30
+                    ty = ttt / 100
+                    print('\n')
+                    print("Total 2017: ", end='')
+                    m = Money(te, 'BRL')
+                    print(m)
+
+                    print('\n')
+                    print("Agricultura Familiar: ", end='')
+                    print(ty)
+                    teste = 0
+                if td.text.strip() == "Total:":
+                    teste = 1
 
     print('\n'"---------------------------------------------------------------")
     time.sleep(TIME)
