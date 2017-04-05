@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
+from openpyxl import Workbook
 import requests
+import datetime
 
 
 def cutting_pickingup_values():
@@ -22,5 +24,23 @@ def cutting_pickingup_values():
     return dict_values
 
 
+def create_wb():
+    wb = Workbook()  # grab the active worksheet
+    ws = wb.active
+
+    # Data can be assigned directly to cells
+    ws['A1'] = 42
+
+    # Rows can also be appended
+    ws.append([1, 2, 3])
+
+    # Python types will automatically be converted
+    ws['A2'] = datetime.datetime.now()
+    today = datetime.datetime.today()
+    nome = 'Planilha{:02d}-{:02d}-{}.xlsx'.format(today.day, today.month, today.year)
+    # Save the file
+    wb.save(nome)
+
 if __name__ == "__main__":
     cutting_pickingup_values()
+    create_wb()
