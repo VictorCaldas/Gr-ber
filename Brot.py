@@ -11,7 +11,7 @@ app = Flask(__name__)
 def began():
     if request.method == 'GET':
         report_fnde()
-        return "Projeto Lilian! - Fim do Relatório"
+        return "Projeto ! - Fim do Relatório"
 
 
 if __name__ == "__main__":
