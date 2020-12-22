@@ -6,7 +6,6 @@ from Schaufel import report_fnde
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=['POST', 'GET'])
 def began():
     if request.method == 'GET':
